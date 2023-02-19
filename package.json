@@ -1,0 +1,23 @@
+{
+  "name": "tokibank",
+  "version": "1.0.0",
+  "description": "Backend de una aplicación de banco sencilla",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/T0kiii/Tokibank.git"
+  },
+  "keywords": [
+    "Go",
+    "PostgreSQL"
+  ],
+  "author": "Alberto Gonzalez",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/T0kiii/Tokibank/issues"
+  },
+  "homepage": "https://github.com/T0kiii/Tokibank#readme"
+}

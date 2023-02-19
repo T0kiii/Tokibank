@@ -1,0 +1,84 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "tsc: compilación: tsconfig.json"
+        },
+        {
+            "label": "Migrar a nueva versión",
+            "type": "shell",
+            "command": "npx knex migrate:latest --knexfile src/db/knexfile.js"
+        },
+        {
+            "label": "Rollback de migración a nueva versión",
+            "type": "shell",
+            "command": "npx knex migrate:rollback"
+        },
+        {
+            "label": "Arrancar Docker al inicio siempre",
+            "type": "shell",
+            "command": "sudo systemctl enable docker"
+        },
+        {
+            "label": "Arrancar Docker daemon",
+            "type": "shell",
+            "command": "sudo systemctl start docker"
+        },
+        {
+            "label": "SOLO CREACIÓN imagen de base de datos test",
+            "type": "shell",
+            "command": "docker build -t tokibd_dev -f Dockerfile .",
+            "problemMatcher":[]
+        },
+        {
+            "label": "SOLO CREACIÓN contenedor de base de datos test",
+            "type": "shell",
+            "command":
+            "docker run --name tokibd_container -p 5432:5432 -v D:\\Users\\Alberto\\Documents\\GitHub\\Tokibank\\scripts:/docker-entrypoint-initdb.d -e POSTGRES_DB=tokibd -e POSTGRES_USER=desa -e POSTGRES_PASSWORD=rrollo -d tokibd_dev",
+            "linux":
+            "docker run --name tokibd_container -p 5432:5432 -v $(pwd)/scripts:/docker-entrypoint-initdb.d -e POSTGRES_DB=tokibd -e POSTGRES_USER=desa -e POSTGRES_PASSWORD=rrollo -d tokibd_dev postgres",
+            "dependsOn":["Crear imagen de base de datos test"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Arrancar base de datos de prueba",
+            "type": "shell",
+            "command": "docker start tokibd_container",
+            "problemMatcher": []
+        },
+        {
+            "label": "Arrancar base de datos de prueba con SUDO",
+            "type": "shell",
+            "command": "sudo docker start tokibd_container",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run db container",
+            "type": "docker-run",
+            "dockerRun": {
+                "image": "./dockerfile",
+                "ports": [
+                    {
+                        "containerPort": 5432,
+                        "hostPort": 5432
+                    }
+                ],
+                "volumes": [
+                    {
+                        "localPath": "${workspaceFolder}/containers",
+                        "containerPath": "/containers/tokibd"
+                    }
+                ],
+                "remove": true
+            }
+        }
+    ]
+}
